@@ -95,84 +95,84 @@ public class GoalManager
     }
 
     public void CreateGoal()
-{
-    int goalType = 0;
-    int goalPoints = 0;
-    string goalName = "";
-    string goalDescription = "";
-    bool isValidGoalType = false;
-
-    //I added a validator to the user input
-    while (!isValidGoalType)
     {
-        Console.WriteLine($"\nThe types of Goals are:");
-        Console.WriteLine("  1. Simple Goal");
-        Console.WriteLine("  2. Eternal Goal");
-        Console.WriteLine("  3. Checklist Goal");
-        Console.Write("Which type of goal would you like to create? ");
+        int goalType = 0;
+        int goalPoints = 0;
+        string goalName = "";
+        string goalDescription = "";
+        bool isValidGoalType = false;
 
-        if (int.TryParse(Console.ReadLine(), out goalType))
+        //I added a validator to the user input
+        while (!isValidGoalType)
         {
-            if (goalType >= 1 && goalType <= 3)
+            Console.WriteLine($"\nThe types of Goals are:");
+            Console.WriteLine("  1. Simple Goal");
+            Console.WriteLine("  2. Eternal Goal");
+            Console.WriteLine("  3. Checklist Goal");
+            Console.Write("Which type of goal would you like to create? ");
+
+            if (int.TryParse(Console.ReadLine(), out goalType))
             {
-                isValidGoalType = true;
+                if (goalType >= 1 && goalType <= 3)
+                {
+                    isValidGoalType = true;
+                }
+                else
+                {
+                    Console.WriteLine("Invalid goal type. Please enter a valid type (1, 2, or 3).");
+                }
             }
             else
             {
-                Console.WriteLine("Invalid goal type. Please enter a valid type (1, 2, or 3).");
+                Console.WriteLine("Invalid input. Please enter a valid integer (1, 2, or 3).");
             }
         }
-        else
+
+        Console.Write("What is the name of your goal? ");
+        goalName = Console.ReadLine();
+
+        Console.Write("What is a short description of it? ");
+        goalDescription = Console.ReadLine();
+
+        Console.Write("What is the amount of points associated with this goal? ");
+        goalPoints = int.Parse(Console.ReadLine());
+
+        bool userIncorrectValue = true;
+        while (userIncorrectValue)
         {
-            Console.WriteLine("Invalid input. Please enter a valid integer (1, 2, or 3).");
+            if(goalType == 1)
+            {
+                SimpleGoal goal = new SimpleGoal(goalName, goalDescription, goalPoints);
+                _goals.Add(goal);
+                userIncorrectValue = false;
+            } 
+            else if (goalType == 2)
+            {
+                EternalGoal goal = new EternalGoal(goalName, goalDescription, goalPoints);
+                _goals.Add(goal);
+                userIncorrectValue = false;
+            }
+            else if (goalType == 3) 
+            {
+                Console.Write("How many times does this goal need to be accomplished for a bonus? ");
+                int target = int.Parse(Console.ReadLine());
+
+                Console.Write("What is the bonus for accomplishing it that many times? ");
+                int bonus = int.Parse(Console.ReadLine());
+
+                ChecklistGoal goal = new ChecklistGoal(goalName, goalDescription, goalPoints, target, bonus);
+                _goals.Add(goal);
+                userIncorrectValue = false;
+            }
+            else
+            {
+                Console.WriteLine("Invalid goal type. Please enter a valid type.");
+                goalType = int.Parse(Console.ReadLine());
+            }
         }
+
+        Console.Clear();       
     }
-
-    Console.Write("What is the name of your goal? ");
-    goalName = Console.ReadLine();
-
-    Console.Write("What is a short description of it? ");
-    goalDescription = Console.ReadLine();
-
-    Console.Write("What is the amount of points associated with this goal? ");
-    goalPoints = int.Parse(Console.ReadLine());
-
-    bool userIncorrectValue = true;
-    while (userIncorrectValue)
-    {
-        if(goalType == 1)
-        {
-            SimpleGoal goal = new SimpleGoal(goalName, goalDescription, goalPoints);
-            _goals.Add(goal);
-            userIncorrectValue = false;
-        } 
-        else if (goalType == 2)
-        {
-            EternalGoal goal = new EternalGoal(goalName, goalDescription, goalPoints);
-            _goals.Add(goal);
-            userIncorrectValue = false;
-        }
-        else if (goalType == 3) 
-        {
-            Console.Write("How many times does this goal need to be accomplished for a bonus? ");
-            int target = int.Parse(Console.ReadLine());
-
-            Console.Write("What is the bonus for accomplishing it that many times? ");
-            int bonus = int.Parse(Console.ReadLine());
-
-            ChecklistGoal goal = new ChecklistGoal(goalName, goalDescription, goalPoints, target, bonus);
-            _goals.Add(goal);
-            userIncorrectValue = false;
-        }
-        else
-        {
-            Console.WriteLine("Invalid goal type. Please enter a valid type.");
-            goalType = int.Parse(Console.ReadLine());
-        }
-    }
-
-    Console.Clear();       
-}
 
     public void RecordEvent()
     {
