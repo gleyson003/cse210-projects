@@ -21,5 +21,5 @@ public class DeliveryOrder : Order
     public override string OrderDetails()
     {
         return $"The client {_clientName} orders the follow:\n {_description}\n The address delivery is {_address}.";
-    } 
+    }
 }

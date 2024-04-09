@@ -4,7 +4,7 @@ public abstract class Order
     protected string _description;
     protected bool _served;
 
-    public Order (string name, string description)
+    public Order(string name, string description)
     {
         _clientName = name;
         _description = description;

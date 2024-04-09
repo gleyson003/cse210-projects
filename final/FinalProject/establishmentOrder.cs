@@ -4,7 +4,7 @@ public class EstablishmentOrder : Order
 
 
     public EstablishmentOrder(int tableNumber, string name, string description) : base(name, description)
-    {   
+    {
         _tableNumber = tableNumber;
     }
 
@@ -22,5 +22,5 @@ public class EstablishmentOrder : Order
     public override string OrderDetails()
     {
         return $"The client {_clientName} orders the follow:\n {_description}\n The tablet from this order is {_tableNumber}.";
-    } 
+    }
 }

@@ -12,7 +12,7 @@ public class OrderManager
     public void Start()
     {
         int userChoice = 0;
-        
+
         Console.WriteLine($"Welcome to the Order Manager!");
         do
         {
@@ -101,9 +101,9 @@ public class OrderManager
         bool userIncorrectValue = true;
         while (userIncorrectValue)
         {
-            if(orderType == 1)
+            if (orderType == 1)
             {
-                
+
                 Console.Write("What is the table's number? ");
                 int tableNumber = int.Parse(Console.ReadLine());
 
@@ -111,9 +111,9 @@ public class OrderManager
                 _orders.Add(establishmentOrder);
 
                 userIncorrectValue = false;
-            } 
+            }
             else if (orderType == 2)
-            {   
+            {
                 Console.Write("What is the car's model? ");
                 string carModel = Console.ReadLine();
 
@@ -128,7 +128,7 @@ public class OrderManager
 
                 userIncorrectValue = false;
             }
-            else if (orderType == 3) 
+            else if (orderType == 3)
             {
                 Console.WriteLine("What is the client's address from this order?");
                 string address = Console.ReadLine();
@@ -149,16 +149,16 @@ public class OrderManager
 
         Console.WriteLine("\nOrder Created. See it in the menu 2 - Orders list.");
         Thread.Sleep(3000);
-        Console.Clear();       
+        Console.Clear();
     }
-    
+
     public void ListOrders()
     {
         int index = 1;
-        
+
         Console.Clear();
 
-        if(_orders.Count > 0)
+        if (_orders.Count > 0)
         {
             foreach (Order o in _orders)
             {
@@ -175,18 +175,18 @@ public class OrderManager
             }
         }
         else
-        {   
+        {
             Console.Clear();
             Console.WriteLine("There are not order to show!");
             Thread.Sleep(3000);
             Console.Clear();
         }
-        
+
     }
 
     public void EditOrder()
     {
-        if(_orders.Count > 0)
+        if (_orders.Count > 0)
         {
             Console.Clear();
 
@@ -281,14 +281,14 @@ public class OrderManager
         Console.Clear();
         Console.WriteLine($"There are {_orders.Count - _orderToServe} served.");
 
-        if (_orderToServe > 0){
+        if (_orderToServe > 0)
+        {
             Console.WriteLine($"{_orderToServe} more to serve all.");
         }
         else
         {
             Console.WriteLine($"No order to serve.");
         }
-        
     }
 
     public void DeleteOrder()
