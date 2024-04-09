@@ -9,11 +9,17 @@ public class DeliveryOrder : Order
 
     public override bool FinishOrder()
     {
-        return true;
+        _served = true;
+        return _served;
+    }
+
+    public override void setDescription(string description)
+    {
+        _description = description;
     }
 
     public override string OrderDetails()
     {
-        return _address;
+        return $"The client {_clientName} orders the follow:\n {_description}\n The address delivery is {_address}.";
     } 
 }

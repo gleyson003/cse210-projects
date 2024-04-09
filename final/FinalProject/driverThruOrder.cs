@@ -14,11 +14,17 @@ public class DriverThruOrder : Order
 
     public override bool FinishOrder()
     {
-        return true;
+        _served = true;
+        return _served;
     }
 
+    public override void setDescription(string description)
+    {
+        _description = description;
+    }
+    
     public override string OrderDetails()
     {
-        return _carModel;
+        return $"The client {_clientName} orders the follow:\n {_description}\n The car of this order is a {_carModel} {_carColor} with the plate {_carPlate}.";
     } 
 }

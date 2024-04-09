@@ -1,11 +1,12 @@
 public class OrderManager
 {
     private List<Order> _orders;
-    private int _orderTotal;
+    private int _orderToServe;
 
     public OrderManager()
     {
         _orders = new List<Order>();
+        _orderToServe = 0;
     }
 
     public void Start()
@@ -15,18 +16,19 @@ public class OrderManager
         Console.WriteLine($"Welcome to the Order Manager!");
         do
         {
-            Console.WriteLine($"Menu Options:");
+            Console.WriteLine($"\nMenu Options:");
             Console.WriteLine("  1. Create New Order");
             Console.WriteLine("  2. List Orders");
-            Console.WriteLine("  3. Edit Order");
-            Console.WriteLine("  4. Delete Order");
-            Console.WriteLine("  5. Quit");
+            Console.WriteLine("  3. Resume Order");
+            Console.WriteLine("  4. Edit Order");
+            Console.WriteLine("  5. Delete Order");
+            Console.WriteLine("  6. Quit");
             Console.Write("Select a choice from the menu: ");
 
-            //I added a validator to the user input
-            while (!int.TryParse(Console.ReadLine(), out userChoice) || userChoice < 1 || userChoice > 5)
+            //Validator to the user input
+            while (!int.TryParse(Console.ReadLine(), out userChoice) || userChoice < 1 || userChoice > 6)
             {
-                Console.WriteLine("Invalid choice. Please select a valid option (1-5).");
+                Console.WriteLine("Invalid choice. Please select a valid option (1-6).");
                 Console.Write("Select a choice from the menu: ");
             }
 
@@ -39,19 +41,22 @@ public class OrderManager
                     ListOrders();
                     break;
                 case 3:
-                    EditOrder();
+                    OrderResume();
                     break;
                 case 4:
-                    DeleteOrder();
+                    EditOrder();
                     break;
                 case 5:
+                    DeleteOrder();
+                    break;
+                case 6:
                     break;
                 default:
-                    Console.WriteLine("Invalid choice. Please select a valid option (1-5).");
+                    Console.WriteLine("Invalid choice. Please select a valid option (1-6).");
                     break;
             }
 
-        } while (userChoice != 5);
+        } while (userChoice != 6);
     }
 
     public void CreateOrder()
@@ -139,24 +144,185 @@ public class OrderManager
                 orderType = int.Parse(Console.ReadLine());
             }
         }
-        
+
+        _orderToServe++;
+
         Console.WriteLine("\nOrder Created. See it in the menu 2 - Orders list.");
-        Thread.Sleep(5000);
+        Thread.Sleep(3000);
         Console.Clear();       
     }
     
     public void ListOrders()
     {
+        int index = 1;
+        
+        Console.Clear();
 
+        if(_orders.Count > 0)
+        {
+            foreach (Order o in _orders)
+            {
+                if (o.GetServerd())
+                {
+                    Console.WriteLine($"{index} - Served? [X]\n {o.OrderDetails()}\n");
+                    index++;
+                }
+                else
+                {
+                    Console.WriteLine($"{index} - Served? []\n {o.OrderDetails()}\n");
+                    index++;
+                }
+            }
+        }
+        else
+        {   
+            Console.Clear();
+            Console.WriteLine("There are not order to show!");
+            Thread.Sleep(3000);
+            Console.Clear();
+        }
+        
     }
 
     public void EditOrder()
     {
+        if(_orders.Count > 0)
+        {
+            Console.Clear();
 
+            int editOption;
+
+            while (true)
+            {
+                Console.WriteLine("\nWhat do you want to do?");
+                Console.WriteLine("    1. Finishing order");
+                Console.WriteLine("    2. Editing order details");
+                Console.Write("Choose an option: ");
+
+                if (!int.TryParse(Console.ReadLine(), out editOption) || (editOption != 1 && editOption != 2))
+                {
+                    Console.WriteLine("Invalid option. Please choose either 1 or 2.");
+                }
+                else
+                {
+                    break;
+                }
+            }
+
+            Console.WriteLine("\nThe orders are: ");
+            ListOrders();
+            int orderIndex = 0;
+
+            if (editOption == 1)
+            {
+                Console.Write("Which order do you want to finish? ");
+                int orderEditedChoose = int.Parse(Console.ReadLine());
+
+                orderIndex = orderEditedChoose - 1;
+
+                if (orderIndex >= 0 && orderIndex < _orders.Count)
+                {
+                    Order orderEdited = _orders[orderIndex];
+
+                    orderEdited.FinishOrder();
+
+                    _orderToServe--;
+
+                    Console.WriteLine($"\nThe order {orderEditedChoose} was served!");
+                    Thread.Sleep(3000);
+                    Console.Clear();
+                }
+                else
+                {
+                    Console.Clear();
+                    Console.WriteLine("Invalid order index. Please choose a valid order to Edit.");
+                    Thread.Sleep(3000);
+                    Console.Clear();
+                }
+            }
+            else if (editOption == 2)
+            {
+                Console.Write("Which order do you want to edit description? ");
+                int orderEditedChoose = int.Parse(Console.ReadLine());
+
+                orderIndex = orderEditedChoose - 1;
+
+                if (orderIndex >= 0 && orderIndex < _orders.Count)
+                {
+                    Console.Write("Enter the new description: ");
+                    string newDescription = Console.ReadLine();
+
+                    _orders[orderIndex].setDescription(newDescription);
+
+                    Console.WriteLine($"\nThe description from the order {orderEditedChoose} was updated successfully!");
+                    Thread.Sleep(3000);
+                    Console.Clear();
+                }
+                else
+                {
+                    Console.Clear();
+                    Console.WriteLine("Invalid order index. Please choose a valid order to Edit.");
+                    Thread.Sleep(3000);
+                    Console.Clear();
+                }
+            }
+        }
+        else
+        {
+            Console.Clear();
+            Console.WriteLine("There are not order to Edit!");
+            Thread.Sleep(3000);
+            Console.Clear();
+        }
+    }
+
+    public void OrderResume()
+    {
+        Console.Clear();
+        Console.WriteLine($"There are {_orders.Count - _orderToServe} served.");
+
+        if (_orderToServe > 0){
+            Console.WriteLine($"{_orderToServe} more to serve all.");
+        }
+        else
+        {
+            Console.WriteLine($"No order to serve.");
+        }
+        
     }
 
     public void DeleteOrder()
     {
+        if (_orders.Count > 0)
+        {
+            Console.Clear();
 
+            Console.WriteLine("The orders are: ");
+            ListOrders();
+
+            Console.Write("Which order do you want to delete? ");
+            int orderToDeleteIndex = int.Parse(Console.ReadLine()) - 1;
+
+            if (orderToDeleteIndex >= 0 && orderToDeleteIndex < _orders.Count)
+            {
+                _orders.RemoveAt(orderToDeleteIndex);
+
+                Console.WriteLine("\nOrder deleted successfully!");
+                Thread.Sleep(3000);
+                Console.Clear();
+            }
+            else
+            {
+                Console.Clear();
+                Console.WriteLine("Invalid order index. Please choose a valid order to delete.");
+            }
+        }
+        else
+        {
+            Console.Clear();
+            Console.WriteLine("There are not order to Delete!");
+            Thread.Sleep(3000);
+            Console.Clear();
+        }
     }
 }
